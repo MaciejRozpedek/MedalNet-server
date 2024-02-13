@@ -25,13 +25,13 @@ public class MedalService {
         return medalRepository.findAll();
     }
 
-    public Medal updateMedal(Medal medal) {
-        return medalRepository.save(medal);
-    }
-
     public Medal findMedalById(Long id) {
         return medalRepository.findMedalById(id)
                 .orElseThrow(() -> new MedalNotFoundException("Medal by id " + id + " was not found"));
+    }
+
+    public Medal updateMedal(Medal medal) {
+        return medalRepository.save(medal);
     }
 
     public void deleteMedal(Long id) {
