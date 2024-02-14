@@ -1,13 +1,11 @@
 package com.macroz.medalnetserver.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
 @Entity
+@Table(name = "medals")
 public class Medal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

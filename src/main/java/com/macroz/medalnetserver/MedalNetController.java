@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/medal")
-public class MedalController {
+public class MedalNetController {
     private final MedalService medalService;
 
-    public MedalController(MedalService medalService) {
+    public MedalNetController(MedalService medalService) {
         this.medalService = medalService;
     }
 
