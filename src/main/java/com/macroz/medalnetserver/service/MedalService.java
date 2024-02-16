@@ -10,31 +10,31 @@ import java.util.List;
 
 @Service
 public class MedalService {
-    private final MedalRepository medalRepository;
+	private final MedalRepository medalRepository;
 
-    @Autowired
-    public MedalService(MedalRepository medalRepository) {
-        this.medalRepository = medalRepository;
-    }
+	@Autowired
+	public MedalService(MedalRepository medalRepository) {
+		this.medalRepository = medalRepository;
+	}
 
-    public Medal addMedal(Medal medal) {
-        return medalRepository.save(medal);
-    }
+	public Medal addMedal(Medal medal) {
+		return medalRepository.save(medal);
+	}
 
-    public List<Medal> findAllMedals() {
-        return medalRepository.findAll();
-    }
+	public List<Medal> findAllMedals() {
+		return medalRepository.findAll();
+	}
 
-    public Medal findMedalById(Long id) {
-        return medalRepository.findMedalById(id)
-                .orElseThrow(() -> new MedalNotFoundException("Medal by id " + id + " was not found"));
-    }
+	public Medal findMedalById(Long id) {
+		return medalRepository.findMedalById(id)
+				.orElseThrow(() -> new MedalNotFoundException("Medal by id " + id + " was not found"));
+	}
 
-    public Medal updateMedal(Medal medal) {
-        return medalRepository.save(medal);
-    }
+	public Medal updateMedal(Medal medal) {
+		return medalRepository.save(medal);
+	}
 
-    public void deleteMedal(Long id) {
-        medalRepository.deleteById(id);
-    }
+	public void deleteMedal(Long id) {
+		medalRepository.deleteById(id);
+	}
 }

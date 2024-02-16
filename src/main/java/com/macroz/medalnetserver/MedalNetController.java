@@ -17,7 +17,7 @@ public class MedalNetController {
         this.medalService = medalService;
     }
 
-@PostMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<Medal> addMedal(@RequestBody Medal medal) {
         Medal newMedal = medalService.addMedal(medal);
         return new ResponseEntity<>(newMedal, HttpStatus.CREATED);
