@@ -1,11 +1,11 @@
 package com.macroz.medalnetserver.service;
 
-import com.macroz.medalnetserver.exception.UserNotFoundException;
-import com.macroz.medalnetserver.exception.UsernameNotFoundException;
 import com.macroz.medalnetserver.model.User;
 import com.macroz.medalnetserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,8 +24,11 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepository.findByUsername(username)
-				.orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+	public Optional<User> getByEmail(String email) {
+		return this.userRepository.findByEmail(email);
+	}
+
+	public Optional<User> getByUsername(String username) {
+		return this.userRepository.findByUsername(username);
 	}
 }
