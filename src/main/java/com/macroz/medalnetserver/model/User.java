@@ -1,6 +1,5 @@
 package com.macroz.medalnetserver.model;
 
-import com.macroz.medalnetserver.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,14 +15,14 @@ public class User{
 	private String username;
 	private String password;
 	private String email;
-	private String profilePictureURL;
+	private String base64profilePicture;
 
 	public User() {}
 
-	public User(String username, String password, String email, String profilePictureURL) {
+	public User(String username, String password, String email, String base64profilePicture) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.profilePictureURL = profilePictureURL;
+		this.base64profilePicture = base64profilePicture;
 	}
 }

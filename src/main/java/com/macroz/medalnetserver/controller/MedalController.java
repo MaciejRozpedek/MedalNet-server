@@ -1,4 +1,4 @@
-package com.macroz.medalnetserver;
+package com.macroz.medalnetserver.controller;
 
 import com.macroz.medalnetserver.model.Medal;
 import com.macroz.medalnetserver.service.MedalService;
@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/medal")
-public class MedalNetController {
+public class MedalController {
     private final MedalService medalService;
 
-    public MedalNetController(MedalService medalService) {
+    public MedalController(MedalService medalService) {
         this.medalService = medalService;
     }
 

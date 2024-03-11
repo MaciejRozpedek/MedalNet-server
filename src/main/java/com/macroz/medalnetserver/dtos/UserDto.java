@@ -9,13 +9,13 @@ import lombok.Setter;
 public class UserDto {
     private String username;
     private String email;
-    private String profilePictureURL;
+    private String base64profilePicture;
 
     public static UserDto from(User user) {
         UserDto userDto = new UserDto();
         userDto.setUsername(user.getUsername());
         userDto.setEmail(user.getEmail());
-        userDto.setProfilePictureURL(user.getProfilePictureURL());
+        userDto.setBase64profilePicture(user.getBase64profilePicture());
         return userDto;
     }
 }

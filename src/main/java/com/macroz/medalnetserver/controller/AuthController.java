@@ -56,8 +56,9 @@ public class AuthController {
 			}
 
 			User user = userOptional.get();
+			user.setPassword(null);
 			String token = jwtUtil.createToken(user);
-			LoginRes loginRes = new LoginRes(token, userOptional.get());
+			LoginRes loginRes = new LoginRes(token, user);
 
 			return new ResponseEntity<>(loginRes, HttpStatus.OK);
 

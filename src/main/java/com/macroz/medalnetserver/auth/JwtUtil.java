@@ -28,7 +28,7 @@ public class JwtUtil {
 	public String createToken(User user) {
 		Claims claims = Jwts.claims().setSubject(user.getEmail());
 		claims.put("username", user.getUsername());
-		claims.put("profilePictureURL", user.getProfilePictureURL());
+		claims.put("base64profilePicture", user.getBase64profilePicture());
 		Date tokenCreateTime = new Date();
 		Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
 		return Jwts.builder()
@@ -83,7 +83,7 @@ public class JwtUtil {
 		return (String) claims.get("username");
 	}
 
-	public String getProfilePictureURL(Claims claims) {
-		return (String) claims.get("profilePictureURL");
+	public String getBase64ProfilePicture(Claims claims) {
+		return (String) claims.get("base64profilePicture");
 	}
 }

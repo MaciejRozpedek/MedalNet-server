@@ -12,15 +12,15 @@ public class Medal implements Serializable {
 	private Long id;
 	private String name;
 	private String category;
-	private String imageURL;
 	private int year;
+	private String base64Image;
 
 	public Medal() {}
 
-	public Medal(String name, String category, String imageURL, int year) {
+	public Medal(String name, String category, String base64Image, int year) {
 		this.name = name;
 		this.category = category;
-		this.imageURL = imageURL;
+		this.base64Image = base64Image;
 		this.year = year;
 	}
 
@@ -48,12 +48,12 @@ public class Medal implements Serializable {
 		this.category = category;
 	}
 
-	public String getImageURL() {
-		return imageURL;
+	public String getBase64Image() {
+		return base64Image;
 	}
 
-	public void setImageURL(String imageURL) {
-		this.imageURL = imageURL;
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
 	}
 
 	public int getYear() {
@@ -70,7 +70,7 @@ public class Medal implements Serializable {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", category='" + category + '\'' +
-				", imageURL='" + imageURL + '\'' +
+				", imageURL='" + base64Image + '\'' +
 				", year=" + year +
 				'}';
 	}
