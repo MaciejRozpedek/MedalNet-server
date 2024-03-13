@@ -3,6 +3,7 @@ package com.macroz.medalnetserver.auth;
 import com.macroz.medalnetserver.model.User;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +68,14 @@ public class JwtUtil {
 		return null;
 	}
 
+	public String resolveToken(HttpHeaders headers) {
+		String bearerToken = headers.getFirst(TOKEN_HEADER);
+		if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
+			return bearerToken.substring(TOKEN_PREFIX.length());
+		}
+		return null;
+	}
+
 	public boolean validateClaims(Claims claims) throws AuthenticationException {
 		try {
 			return claims.getExpiration().after(new Date());
@@ -81,6 +90,11 @@ public class JwtUtil {
 
 	public String getUsername(Claims claims) {
 		return (String) claims.get("username");
+	}
+
+	public String getUsernameFromToken(String accessToken) {
+		Claims claims = parseJwtClaims(accessToken);
+		return getUsername(claims);
 	}
 
 	public String getBase64ProfilePicture(Claims claims) {

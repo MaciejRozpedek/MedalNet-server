@@ -1,24 +1,40 @@
 package com.macroz.medalnetserver.controller;
 
+import com.macroz.medalnetserver.auth.JwtUtil;
 import com.macroz.medalnetserver.model.Medal;
+import com.macroz.medalnetserver.model.User;
 import com.macroz.medalnetserver.service.MedalService;
+import com.macroz.medalnetserver.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/medal")
 public class MedalController {
     private final MedalService medalService;
+    private final JwtUtil jwtUtil;
+    private final UserService userService;
 
-    public MedalController(MedalService medalService) {
+    public MedalController(MedalService medalService, JwtUtil jwtUtil, UserService userService) {
         this.medalService = medalService;
-    }
+		this.jwtUtil = jwtUtil;
+		this.userService = userService;
+	}
 
     @PostMapping("/add")
-    public ResponseEntity<Medal> addMedal(@RequestBody Medal medal) {
+    public ResponseEntity<Medal> addMedal(@RequestBody Medal medal, @RequestHeader HttpHeaders headers) {
+        String accessToken = jwtUtil.resolveToken(headers);
+        String username = jwtUtil.getUsernameFromToken(accessToken);
+        Optional<User> userOptional = userService.getByUsername(username);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        medal.setUserId(userOptional.get().getId());
         Medal newMedal = medalService.addMedal(medal);
         return new ResponseEntity<>(newMedal, HttpStatus.CREATED);
     }

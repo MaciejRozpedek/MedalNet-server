@@ -1,9 +1,13 @@
 package com.macroz.medalnetserver.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "medals")
 public class Medal implements Serializable {
@@ -14,54 +18,16 @@ public class Medal implements Serializable {
 	private String category;
 	private int year;
 	private String base64Image;
+	private Long userId;
 
 	public Medal() {}
 
-	public Medal(String name, String category, String base64Image, int year) {
+	public Medal(String name, String category, String base64Image, int year, Long userId) {
 		this.name = name;
 		this.category = category;
 		this.base64Image = base64Image;
 		this.year = year;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getBase64Image() {
-		return base64Image;
-	}
-
-	public void setBase64Image(String base64Image) {
-		this.base64Image = base64Image;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
+		this.userId = userId;
 	}
 
 	@Override
@@ -72,6 +38,7 @@ public class Medal implements Serializable {
 				", category='" + category + '\'' +
 				", imageURL='" + base64Image + '\'' +
 				", year=" + year +
+				", userId=" + userId +
 				'}';
 	}
 }
