@@ -45,6 +45,18 @@ public class MedalController {
         return  new ResponseEntity<>(medals, HttpStatus.OK);
     }
 
+    @GetMapping("/search-by-name/{query}")
+    public ResponseEntity<List<Medal>> searchMedalsByName(@PathVariable("query") String query) {
+        List<Medal> medals = medalService.searchMedalsByName(query);
+        return new ResponseEntity<>(medals, HttpStatus.OK);
+    }
+
+    @GetMapping("/search-by-number/{query}")
+    public ResponseEntity<List<Medal>> searchMedalsByNumber(@PathVariable("query") String query) {
+        List<Medal> medals = medalService.searchMedalsByNumber(query);
+        return new ResponseEntity<>(medals, HttpStatus.OK);
+    }
+
     @GetMapping("/find/{id}")
     public ResponseEntity<Medal> getMedalById(@PathVariable("id") Long id) {
         Medal medal = medalService.findMedalById(id);

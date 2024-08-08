@@ -37,4 +37,12 @@ public class MedalService {
 	public void deleteMedal(Long id) {
 		medalRepository.deleteById(id);
 	}
+
+	public List<Medal> searchMedalsByName(String query) {
+		return medalRepository.findMedalsByNameContainingOrSurnameContaining(query, query);
+	}
+
+	public List<Medal> searchMedalsByNumber(String query) {
+		return medalRepository.findMedalsByNumber(query);
+	}
 }

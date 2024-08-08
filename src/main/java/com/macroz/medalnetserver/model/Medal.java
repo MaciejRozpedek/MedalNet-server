@@ -14,19 +14,34 @@ public class Medal implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String number;
 	private String name;
-	private String category;
+	private String surname;
+	@Column(name = "`rank`")
+	private String rank;
+	private String unit;
+	@Column(nullable = true)
 	private int year;
-	private String base64Image;
-	private Long userId;
+	private String notes;
+	private Long userId;    // ID of user, who added this medal
 
 	public Medal() {}
 
-	public Medal(String name, String category, String base64Image, int year, Long userId) {
+	public Medal(String number,
+				 String name,
+				 String surname,
+				 String rank,
+				 String unit,
+				 int year,
+				 String notes,
+				 Long userId) {
+		this.number = number;
 		this.name = name;
-		this.category = category;
-		this.base64Image = base64Image;
+		this.surname = surname;
+		this.rank = rank;
+		this.unit = unit;
 		this.year = year;
+		this.notes = notes;
 		this.userId = userId;
 	}
 
@@ -34,10 +49,13 @@ public class Medal implements Serializable {
 	public String toString() {
 		return "Medal{" +
 				"id=" + id +
+				", number=" + number +
 				", name='" + name + '\'' +
-				", category='" + category + '\'' +
-				", imageURL='" + base64Image + '\'' +
+				", surname='" + surname + '\'' +
+				", rank='" + rank + '\'' +
+				", unit='" + unit + '\'' +
 				", year=" + year +
+				", notes='" + notes + '\'' +
 				", userId=" + userId +
 				'}';
 	}
