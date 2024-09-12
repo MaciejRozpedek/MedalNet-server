@@ -1,17 +1,14 @@
 package com.macroz.medalnetserver.dtos;
 
-import com.macroz.medalnetserver.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRes {
+public class RegisterResDTO {
 	private String token;
-	private User user;
 
-	public LoginRes(String token, User user) {
+	public RegisterResDTO(String token) {
 		this.token = token;
-		this.user = user;
 	}
 }

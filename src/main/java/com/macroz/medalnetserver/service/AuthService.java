@@ -1,6 +1,5 @@
 package com.macroz.medalnetserver.service;
 
-import com.macroz.medalnetserver.dtos.UserDto;
 import com.macroz.medalnetserver.model.User;
 import com.macroz.medalnetserver.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +17,8 @@ public class AuthService {
 		this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	}
 
-	public UserDto signUp(String username, String email, String password) {
+	// returns created user or null if username or email are taken
+	public User register(String username, String email, String password) {
 		//check if username or email are taken
 		Optional<User> userOptional = userRepository.findByUsername(username);
 		if (userOptional.isPresent()) return null;
@@ -33,6 +33,6 @@ public class AuthService {
 
 		User savedUser = userRepository.save(user);
 
-		return UserDto.from(savedUser);
+		return savedUser;
 	}
 }

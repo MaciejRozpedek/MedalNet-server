@@ -15,7 +15,7 @@ public class JwtUtil {
 
 
 	private final String secret_key = "ultraTopSecretKey:)";
-	private final long accessTokenValidity = 60*60*1000;
+	private final long accessTokenValidity = 60*24*30;	// in minutes, now equals 30 days
 
 	private final JwtParser jwtParser;
 
@@ -29,7 +29,6 @@ public class JwtUtil {
 	public String createToken(User user) {
 		Claims claims = Jwts.claims().setSubject(user.getEmail());
 		claims.put("username", user.getUsername());
-		claims.put("base64profilePicture", user.getBase64profilePicture());
 		Date tokenCreateTime = new Date();
 		Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
 		return Jwts.builder()
@@ -95,9 +94,5 @@ public class JwtUtil {
 	public String getUsernameFromToken(String accessToken) {
 		Claims claims = parseJwtClaims(accessToken);
 		return getUsername(claims);
-	}
-
-	public String getBase64ProfilePicture(Claims claims) {
-		return (String) claims.get("base64profilePicture");
 	}
 }

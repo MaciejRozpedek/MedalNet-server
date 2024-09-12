@@ -58,9 +58,9 @@ public class AuthController {
 			User user = userOptional.get();
 			user.setPassword(null);
 			String token = jwtUtil.createToken(user);
-			LoginRes loginRes = new LoginRes(token, user);
+			LoginResDTO loginResDTO = new LoginResDTO(token);
 
-			return new ResponseEntity<>(loginRes, HttpStatus.OK);
+			return new ResponseEntity<>(loginResDTO, HttpStatus.OK);
 
 		}catch (BadCredentialsException e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username or password");
@@ -69,13 +69,15 @@ public class AuthController {
 		}
 	}
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto request) {
-		UserDto userDto = authService.signUp(request.getUsername(), request.getEmail(), request.getPassword());
-		if (userDto == null) {
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody RegisterRequestDto request) {
+		User user = authService.register(request.getUsername(), request.getEmail(), request.getPassword());
+		if (user == null) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Username and email are already taken");
 		} else {
-			return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+			String token = jwtUtil.createToken(user);
+			RegisterResDTO registerResDTO = new RegisterResDTO(token);
+			return new ResponseEntity<>(registerResDTO, HttpStatus.CREATED);
 		}
 	}
 
