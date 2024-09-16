@@ -39,6 +39,18 @@ public class MedalController {
         return new ResponseEntity<>(newMedal, HttpStatus.CREATED);
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<List<Medal>> getMyMedals(@RequestHeader HttpHeaders headers) {
+        String accessToken = jwtUtil.resolveToken(headers);
+        String username = jwtUtil.getUsernameFromToken(accessToken);
+        Optional<User> userOptional = userService.getByUsername(username);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<Medal> medals = medalService.findMedalsByUserId(userOptional.get().getId());
+        return new ResponseEntity<>(medals, HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Medal>> getAllMedals() {
         List<Medal> medals = medalService.findAllMedals();

@@ -45,4 +45,8 @@ public class MedalService {
 	public List<Medal> searchMedalsByNumber(String query) {
 		return medalRepository.findMedalsByNumber(query);
 	}
+
+	public List<Medal> findMedalsByUserId(Long id) {
+		return medalRepository.findMedalsByUserId(id);
+	}
 }
