@@ -76,7 +76,14 @@ public class MedalController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Medal> updateMedal(@RequestBody Medal medal) {
+    public ResponseEntity<Medal> updateMedal(@RequestBody Medal medal, @RequestHeader HttpHeaders headers) {
+        String accessToken = jwtUtil.resolveToken(headers);
+        String username = jwtUtil.getUsernameFromToken(accessToken);
+        Optional<User> userOptional = userService.getByUsername(username);
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        medal.setUserId(userOptional.get().getId());
         Medal updateMedal = medalService.updateMedal(medal);
         return new ResponseEntity<>(updateMedal, HttpStatus.OK);
     }
