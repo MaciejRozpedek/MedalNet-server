@@ -1,6 +1,7 @@
 package com.macroz.medalnetserver.controller;
 
 import com.macroz.medalnetserver.auth.JwtUtil;
+import com.macroz.medalnetserver.exception.MedalNotFoundException;
 import com.macroz.medalnetserver.model.Medal;
 import com.macroz.medalnetserver.model.User;
 import com.macroz.medalnetserver.service.MedalService;
@@ -92,5 +93,10 @@ public class MedalController {
     public ResponseEntity<?> deleteMedal(@PathVariable("id") Long id) {
         medalService.deleteMedal(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ExceptionHandler(MedalNotFoundException.class)
+    public ResponseEntity<?> handleMedalNotFoundException(MedalNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
