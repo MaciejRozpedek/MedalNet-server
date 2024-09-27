@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -27,7 +28,8 @@ public class Medal implements Serializable {
 
 	public Medal() {}
 
-	public Medal(String number,
+	public Medal(Long id,
+				 String number,
 				 String name,
 				 String surname,
 				 String rank,
@@ -35,6 +37,7 @@ public class Medal implements Serializable {
 				 int year,
 				 String notes,
 				 Long userId) {
+		this.id = id;
 		this.number = number;
 		this.name = name;
 		this.surname = surname;
@@ -58,5 +61,26 @@ public class Medal implements Serializable {
 				", notes='" + notes + '\'' +
 				", userId=" + userId +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Medal medal = (Medal) o;
+		return year == medal.year &&
+				Objects.equals(id, medal.id) &&
+				Objects.equals(number, medal.number) &&
+				Objects.equals(name, medal.name) &&
+				Objects.equals(surname, medal.surname) &&
+				Objects.equals(rank, medal.rank) &&
+				Objects.equals(unit, medal.unit) &&
+				Objects.equals(notes, medal.notes) &&
+				Objects.equals(userId, medal.userId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, number, name, surname, rank, unit, year, notes, userId);
 	}
 }

@@ -2,11 +2,13 @@ package com.macroz.medalnetserver.auth;
 
 import com.macroz.medalnetserver.model.User;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class JwtUtil {
 
 
-	private final String secret_key = "ultraTopSecretKey:)";
+	private final SecretKey secretKey = Keys.hmacShaKeyFor("ultraTopSecretKey:)AtLeast32CharactersLong".getBytes());
 	private final long accessTokenValidity = 60*24*30;	// in minutes, now equals 30 days
 
 	private final JwtParser jwtParser;
@@ -23,23 +25,25 @@ public class JwtUtil {
 	private final String TOKEN_PREFIX = "Bearer ";
 
 	public JwtUtil(){
-		this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+		this.jwtParser = Jwts.parser().verifyWith(secretKey).build();
 	}
 
 	public String createToken(User user) {
-		Claims claims = Jwts.claims().setSubject(user.getEmail());
-		claims.put("username", user.getUsername());
+		Claims claims = Jwts.claims()
+				.subject(user.getEmail())
+				.add("username", user.getUsername())
+				.build();
 		Date tokenCreateTime = new Date();
 		Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
 		return Jwts.builder()
-				.setClaims(claims)
-				.setExpiration(tokenValidity)
-				.signWith(SignatureAlgorithm.HS256, secret_key)
+				.claims(claims)
+				.expiration(tokenValidity)
+				.signWith(secretKey, Jwts.SIG.HS256)
 				.compact();
 	}
 
 	private Claims parseJwtClaims(String token) {
-		return jwtParser.parseClaimsJws(token).getBody();
+		return jwtParser.parseSignedClaims(token).getPayload();
 	}
 
 	public Claims resolveClaims(HttpServletRequest req) {
