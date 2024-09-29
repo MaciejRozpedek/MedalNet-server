@@ -60,6 +60,8 @@ jobs:
 
     # Step 4: Build the project with Maven
     - name: Build with Maven
+      env:
+        SPRING_PROFILES_ACTIVE: ci
       run: mvn -B clean verify
 
     # Step 5: Run tests with database environment variables
