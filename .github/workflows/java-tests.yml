@@ -45,39 +45,22 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    # Step 3: Wait for MySQL to be ready
-    - name: Wait for MySQL
-      run: |
-        echo "Waiting for MySQL to be ready..."
-        for i in {1..30}; do
-          if mysqladmin ping -h 127.0.0.1 --silent; then
-            echo "MySQL is up!"
-            break
-          fi
-          echo "Waiting for MySQL..."
-          sleep 5
-        done
-
-    # Step 4: Build the project with Maven
+    # Step 3: Build the project with Maven
     - name: Build with Maven
       env:
         SPRING_PROFILES_ACTIVE: ci
       run: mvn -B clean verify
 
-    # Step 5: Run tests with database environment variables
+    # Step 4: Run tests with database environment variables
     - name: Run Tests
       env:
         SPRING_PROFILES_ACTIVE: ci
       run: mvn test
 
-    # Step 6: Upload JUnit test results as artifacts for easier inspection
+    # Step 5: Upload JUnit test results as artifacts for easier inspection
     - name: Upload test results
       if: always()  # Ensures results are uploaded even if the test fails
       uses: actions/upload-artifact@v3
       with:
         name: test-results
         path: target/surefire-reports/  # The default directory where test reports are saved
-
-    # Step 7 Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
