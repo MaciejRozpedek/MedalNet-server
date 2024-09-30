@@ -18,5 +18,10 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
 			"ORDER BY CASE WHEN m.number LIKE :query% THEN 1 ELSE 2 END")
 	List<Medal> findMedalsByNumber(String query);
 
+
+	@Query("SELECT m FROM Medal m " +
+			"WHERE m.number = :number")
+	Medal findMedalByExactNumber(String number);
+
 	List<Medal> findMedalsByUserId(Long id);
 }

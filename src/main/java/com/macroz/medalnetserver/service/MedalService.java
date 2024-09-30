@@ -70,6 +70,10 @@ public class MedalService {
 		return medalRepository.findMedalsByNumber(query);
 	}
 
+	public Medal searchMedalsByExactNumber(String number) {
+		return medalRepository.findMedalByExactNumber(number);
+	}
+
 	public List<Medal> findMedalsByUserId(Long id) {
 		return medalRepository.findMedalsByUserId(id);
 	}

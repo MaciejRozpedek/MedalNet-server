@@ -35,6 +35,9 @@ public class MedalController {
         if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if (medalService.searchMedalsByExactNumber(medal.getNumber()) != null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         medal.setUserId(userOptional.get().getId());
         Medal newMedal = medalService.addMedal(medal);
         return new ResponseEntity<>(newMedal, HttpStatus.CREATED);
