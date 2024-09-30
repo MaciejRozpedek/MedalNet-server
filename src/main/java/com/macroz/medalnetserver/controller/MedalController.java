@@ -81,6 +81,9 @@ public class MedalController {
 
     @PutMapping("/update")
     public ResponseEntity<Medal> updateMedal(@RequestBody Medal medal, @RequestHeader HttpHeaders headers) {
+        if (medalService.findMedalById(medal.getId()) == null) {
+            throw new MedalNotFoundException("Medal by id " + medal.getId() + " was not found");
+        }
         String accessToken = jwtUtil.resolveToken(headers);
         String username = jwtUtil.getUsernameFromToken(accessToken);
         Optional<User> userOptional = userService.getByUsername(username);
@@ -94,8 +97,19 @@ public class MedalController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteMedal(@PathVariable("id") Long id) {
+        if (medalService.findMedalById(id) == null) {
+            throw new MedalNotFoundException("Medal by id " + id + " was not found");
+        }
         medalService.deleteMedal(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/medal-history/{id}")
+    public ResponseEntity<?> getMedalHistory(@PathVariable("id") Long id) {
+        if (medalService.findMedalById(id) == null) {
+            throw new MedalNotFoundException("Medal by id " + id + " was not found");
+        }
+        return new ResponseEntity<>(medalService.getMedalHistory(id), HttpStatus.OK);
     }
 
     @ExceptionHandler(MedalNotFoundException.class)

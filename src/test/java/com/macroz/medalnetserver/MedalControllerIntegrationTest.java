@@ -3,6 +3,7 @@ package com.macroz.medalnetserver;
 import com.macroz.medalnetserver.auth.JwtUtil;
 import com.macroz.medalnetserver.model.Medal;
 import com.macroz.medalnetserver.model.User;
+import com.macroz.medalnetserver.repository.MedalHistoryRepository;
 import com.macroz.medalnetserver.repository.MedalRepository;
 import com.macroz.medalnetserver.repository.UserRepository;
 import com.macroz.medalnetserver.service.MedalService;
@@ -30,6 +31,9 @@ public class MedalControllerIntegrationTest {
 	private MedalRepository medalRepository;
 
 	@Autowired
+	private MedalHistoryRepository medalHistoryRepository;
+
+	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
@@ -46,30 +50,29 @@ public class MedalControllerIntegrationTest {
 		// TODO: Add deleteAll functions to service, and use service here
 		medalRepository.deleteAll();
 		userRepository.deleteAll();
+		medalHistoryRepository.deleteAll();
 	}
 
 	@Test
 	public void testAddMedal() {
 		// TODO: Check if MedalHistory is working correct
 		// Create a test user
-		User user = new User();
-		user.setUsername("testUser");
-		user.setEmail("dummy@mail.com");
-		user.setPassword("password");
+		User user = new User("testUser", "dummy@mail.com", "password", null);
 		userService.createUser(user);
 
 		// Simulate a valid JWT token for the test user
 		String validToken = "Bearer " + jwtUtil.createToken(user);
 
 		// Create a Medal object to add
-		Medal medal = new Medal();
-		medal.setNumber("12345");
-		medal.setName("John");
-		medal.setSurname("Doe");
-		medal.setRank("General");
-		medal.setUnit("Army");
-		medal.setYear(2022);
-		medal.setNotes("Awarded for bravery");
+		Medal medal = new Medal(null,
+				"12345",
+				"John",
+				"Doe",
+				"General",
+				"Army",
+				2022,
+				"Awarded for bravery",
+				null);
 
 		// Build the request entity with the medal data and headers
 		HttpHeaders headers = new HttpHeaders();
@@ -102,18 +105,12 @@ public class MedalControllerIntegrationTest {
 	@Test
 	public void testGetAllMyMedals() {
 		// Create a test user
-		User user = new User();
-		user.setUsername("testUser");
-		user.setEmail("dummy@email.com");
-		user.setPassword("password");
+		User user = new User("testUser", "dummy@email.com", "password", null);
 		String validToken = "Bearer " + jwtUtil.createToken(user);
 		user = userRepository.save(user);
 
 		// Create a dummy user
-		User dummyUser = new User();
-		dummyUser.setUsername("dummyUser");
-		dummyUser.setEmail("dummyUser@email.com");
-		dummyUser.setPassword("dummyPassword");
+		User dummyUser = new User("dummyUser", "dummyUser@email.com", "dummyPassword", null);
 		dummyUser = userRepository.save(dummyUser);
 
 		List<Medal> medalList = new ArrayList<>();
@@ -156,8 +153,8 @@ public class MedalControllerIntegrationTest {
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
-		assertArrayEquals(new Long[] {medals.get(0).getUserId(), medals.get(1).getUserId()},
-				new Long[] {user.getId(), user.getId()});
+		assertArrayEquals(new Long[]{medals.get(0).getUserId(), medals.get(1).getUserId()},
+				new Long[]{user.getId(), user.getId()});
 		assertIterableEquals(medalList, medals);
 	}
 }

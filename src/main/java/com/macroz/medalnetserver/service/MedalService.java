@@ -78,6 +78,10 @@ public class MedalService {
 		return medalRepository.findMedalsByUserId(id);
 	}
 
+	public List<MedalHistory> getMedalHistory(Long medalId) {
+		return medalHistoryRepository.findByMedalIdOrderByModifiedAtDesc(medalId);
+	}
+
 	private void saveMedalHistory(Medal medal, String changeType) {
 		MedalHistory medalHistory = new MedalHistory();
 		medalHistory.setMedalId(medal.getId());
