@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ public class MedalControllerIntegrationTest {
 
 	@BeforeEach
 	public void setup() {
-		// TODO: Add deleteAll functions to service, and use service here
 		medalRepository.deleteAll();
 		userRepository.deleteAll();
 		medalHistoryRepository.deleteAll();
@@ -80,13 +80,18 @@ public class MedalControllerIntegrationTest {
 		HttpEntity<Medal> request = new HttpEntity<>(medal, headers);
 
 		// Send the POST request to the /medal/add endpoint
-		ResponseEntity<Medal> response = restTemplate.postForEntity("/medal/add", request, Medal.class);
+		ResponseEntity<List<Medal>> response = restTemplate.exchange(
+				"/medal/add",
+				HttpMethod.POST,
+				request,
+				new ParameterizedTypeReference<List<Medal>>() {}
+		);
 
 		// Check if the response status code is 201 CREATED
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
 		// Assert the created medal is not null and contains correct data
-		Medal createdMedal = response.getBody();
+		Medal createdMedal = response.getBody().get(0);
 		assertNotNull(createdMedal);
 		assertEquals("12345", createdMedal.getNumber());
 		assertEquals("John", createdMedal.getName());
@@ -121,8 +126,8 @@ public class MedalControllerIntegrationTest {
 			Medal dummyMedal = new Medal();
 			testMedal.setNumber("12345" + i);
 			dummyMedal.setNumber("54321" + i);
-			testMedal.setName("test_" + String.valueOf(i));
-			dummyMedal.setName("dummy_" + String.valueOf(i));
+			testMedal.setName("test_" + i);
+			dummyMedal.setName("dummy_" + i);
 
 			// Set the user ID for the medals
 			testMedal.setUserId(user.getId());

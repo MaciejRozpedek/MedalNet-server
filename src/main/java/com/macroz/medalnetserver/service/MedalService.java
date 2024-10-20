@@ -29,7 +29,6 @@ public class MedalService {
 	}
 
 	public Medal addMedal(Medal medal) {
-//		TODO: don't save, when medal number exists - maybe
 		saveMedalHistory(medal, "CREATE");
 		return medalRepository.save(medal);
 	}
@@ -70,8 +69,8 @@ public class MedalService {
 		return medalRepository.findMedalsByNumber(query);
 	}
 
-	public Medal searchMedalsByExactNumber(String number) {
-		return medalRepository.findMedalByExactNumber(number);
+	public List<Medal> findMedalsByExactNumber(String number) {
+		return medalRepository.findMedalsByExactNumber(number);
 	}
 
 	public List<Medal> findMedalsByUserId(Long id) {

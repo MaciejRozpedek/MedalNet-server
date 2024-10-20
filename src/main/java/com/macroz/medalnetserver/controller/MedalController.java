@@ -27,21 +27,22 @@ public class MedalController {
 		this.userService = userService;
 	}
 
+    // Return added medal, or return list of existing medals if number already exists
     @PostMapping("/add")
-    public ResponseEntity<Medal> addMedal(@RequestBody Medal medal, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<List<Medal>> addMedal(@RequestBody Medal medal, @RequestHeader HttpHeaders headers) {
         String accessToken = jwtUtil.resolveToken(headers);
         String username = jwtUtil.getUsernameFromToken(accessToken);
         Optional<User> userOptional = userService.getByUsername(username);
         if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Medal existingMedal = medalService.searchMedalsByExactNumber(medal.getNumber());
-        if (existingMedal != null) {
-            return new ResponseEntity<>(existingMedal, HttpStatus.CONFLICT);
+        List<Medal> existingMedals = medalService.findMedalsByExactNumber(medal.getNumber());
+        if (!existingMedals.isEmpty()) {
+            return new ResponseEntity<>(existingMedals, HttpStatus.CONFLICT);
         }
         medal.setUserId(userOptional.get().getId());
         Medal newMedal = medalService.addMedal(medal);
-        return new ResponseEntity<>(newMedal, HttpStatus.CREATED);
+        return new ResponseEntity<>(List.of(newMedal), HttpStatus.CREATED);
     }
 
     @GetMapping("/my")

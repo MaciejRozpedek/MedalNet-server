@@ -21,7 +21,7 @@ public interface MedalRepository extends JpaRepository<Medal, Long> {
 
 	@Query("SELECT m FROM Medal m " +
 			"WHERE m.number = :number")
-	Medal findMedalByExactNumber(String number);
+	List<Medal> findMedalsByExactNumber(String number);
 
 	List<Medal> findMedalsByUserId(Long id);
 }
